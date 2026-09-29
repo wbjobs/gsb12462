@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>审批流状态机模拟器</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header>
+  <h1>审批流状态机模拟器</h1>
+  <div class="head-actions">
+    <label>当前用户 <select id="actor"></select></label>
+    <button id="btn-seed-legacy" title="注入 v1 / v99 测试数据">注入旧版本数据</button>
+    <button id="btn-clear" class="danger">清空存储</button>
+  </div>
+</header>
+
+<main>
+  <aside>
+    <section class="panel">
+      <div class="panel-head">
+        <h3>实例（多实例并行）</h3>
+        <button id="btn-new" class="primary">新建实例</button>
+      </div>
+      <div id="instance-list"></div>
+    </section>
+    <section class="panel">
+      <div class="panel-head"><h3>流程定义（步骤 / 角色 / 流转）</h3></div>
+      <textarea id="def-editor" spellcheck="false"></textarea>
+      <div class="row">
+        <button id="btn-apply-def">应用定义（新实例生效）</button>
+        <button id="btn-reset-def">恢复默认</button>
+      </div>
+    </section>
+  </aside>
+
+  <section class="content">
+    <div id="diagram-wrap" class="panel">
+      <h3>状态机图</h3>
+      <div class="canvas-scroll"><canvas id="diagram"></canvas></div>
+    </div>
+    <div id="replay" class="panel replay-bar"></div>
+    <div id="actions" class="panel"></div>
+    <div id="detail" class="panel"></div>
+  </section>
+</main>
+
+<div id="toast"></div>
+
+<script src="js/machine.js"></script>
+<script src="js/diagram.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
