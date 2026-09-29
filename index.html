@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>本地审批流状态机模拟器</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <h1>审批流状态机模拟器</h1>
+      <p>IndexedDB 持久化 · Web Worker 状态机 · Canvas 状态图 · 多实例与事件回放</p>
+    </div>
+    <div class="toolbar" aria-label="全局工具栏">
+      <label>
+        当前身份
+        <select id="identitySelect"></select>
+      </label>
+      <button type="button" id="refreshBtn" class="secondary">刷新</button>
+      <button type="button" id="exportBtn" class="secondary">导出 JSON</button>
+      <button type="button" id="seedV1Btn" class="secondary">导入 v1 示例</button>
+      <button type="button" id="seedFutureBtn" class="secondary">导入未来版本</button>
+      <button type="button" id="clearBtn" class="danger">清空存储</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="panel instances-panel">
+      <h2>新建申请</h2>
+      <form id="createForm" class="create-form">
+        <label>
+          标题
+          <input id="createTitle" required minlength="2" maxlength="80" placeholder="例如：差旅报销">
+        </label>
+        <label>
+          金额
+          <input id="createAmount" inputmode="decimal" placeholder="例如：1280.50">
+        </label>
+        <label>
+          事由
+          <textarea id="createReason" rows="3" maxlength="300" placeholder="请输入申请事由"></textarea>
+        </label>
+        <button type="submit" id="createBtn">创建草稿</button>
+      </form>
+
+      <h2 class="list-title">审批实例 <span id="instanceCount" class="count"></span></h2>
+      <div id="instanceList" class="instance-list"></div>
+    </aside>
+
+    <section class="panel detail-panel">
+      <div id="detail" class="detail-empty">
+        <strong>请选择或创建一个审批实例</strong>
+        <span>可以同时创建多个实例，状态按实例 ID 完全隔离。</span>
+      </div>
+    </section>
+
+    <aside class="panel graph-panel">
+      <h2>状态机图</h2>
+      <div class="canvas-wrap">
+        <canvas id="flowCanvas" width="900" height="370" aria-label="审批状态机图"></canvas>
+      </div>
+      <div class="legend">
+        <span><i class="swatch current"></i>当前节点</span>
+        <span><i class="swatch approved"></i>已通过</span>
+        <span><i class="swatch returned"></i>退回/重审</span>
+        <span><i class="swatch withdrawn"></i>撤回</span>
+      </div>
+
+      <section class="replay-box">
+        <h2>状态回放</h2>
+        <div class="replay-actions">
+          <button type="button" id="replayBtn" disabled>从事件重放</button>
+          <button type="button" id="playReplayBtn" disabled>播放</button>
+          <button type="button" id="exitReplayBtn" disabled>回到当前</button>
+        </div>
+        <input type="range" id="replayRange" min="0" value="0" disabled>
+        <div id="replayMeta" class="replay-meta">选择实例后可重放全部事件。</div>
+        <pre id="replayJson" class="json-small" hidden></pre>
+      </section>
+    </aside>
+  </main>
+
+  <div id="toastHost" class="toast-host" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
